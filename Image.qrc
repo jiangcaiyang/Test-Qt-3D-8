@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>texturePalette.png</file>
+        <file>discreetPalette.png</file>
+    </qresource>
+</RCC>
