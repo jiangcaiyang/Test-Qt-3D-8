@@ -23,7 +23,7 @@ Entity
         id: colorAttachTex
         width: 1024
         height: 1024
-        format: Texture.RGB8_UNorm
+        format: Texture.RGBAFormat
         generateMipMaps: false
         magnificationFilter: Texture.Nearest
         minificationFilter: Texture.Nearest
@@ -39,7 +39,7 @@ Entity
         id : depthAttachTex
         width: 1024
         height: 1024
-        format: Texture.D32F
+        format: Texture.DepthFormat
         generateMipMaps: false
         magnificationFilter: Texture.Nearest
         minificationFilter: Texture.Nearest
@@ -55,7 +55,7 @@ Entity
         Viewport
         {
             rect: Qt.rect( 0.0, 0.0, 1.0, 1.0 )
-            clearColor: Qt.rgba( 0.0, 0.4, 0.7, 1.0 )
+            clearColor: Qt.rgba( 0.8, 0.6, 0.3, 1.0 )
 
             LayerFilter
             {
@@ -172,8 +172,8 @@ Entity
                         ShaderProgram
                         {
                             id: toonSP
-                            vertexShaderCode: loadSource( "qrc:/Toon.vert" )
-                            fragmentShaderCode: loadSource( "qrc:/Toon.frag" )
+                            vertexShaderCode: loadSource( "qrc:/Depth.vert" )
+                            fragmentShaderCode: loadSource( "qrc:/Depth.frag" )
                         }
 
 //                        renderStates:
@@ -246,11 +246,6 @@ Entity
                         },
                         Parameter
                         {
-                            name: "depthAttachTex"
-                            value: depthAttachTex
-                        },
-                        Parameter
-                        {
                             name: "texSize"
                             value : Qt.size( window.width,
                                             window.height )
@@ -258,12 +253,12 @@ Entity
                         Parameter
                         {
                             name: "texOffsetX"
-                            value: 1.0 / colorAttachTex.width
+                            value: 1.0 / depthAttachTex.width
                         },
                         Parameter
                         {
                             name: "texOffsetY"
-                            value: 1.0 / colorAttachTex.height
+                            value: 1.0 / depthAttachTex.height
                         }
                     ]
 
@@ -279,7 +274,6 @@ Entity
                             vertexShaderCode: loadSource( "qrc:/Output.vert" )
                             fragmentShaderCode: loadSource( "qrc:/Output.frag" )
                         }
-
 //                        renderStates:
 //                        [
 //                            PolygonOffset { factor: 4; units: 4 },

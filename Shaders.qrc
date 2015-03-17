@@ -4,5 +4,7 @@
         <file>Toon.vert</file>
         <file>Output.frag</file>
         <file>Output.vert</file>
+        <file>Depth.vert</file>
+        <file>Depth.frag</file>
     </qresource>
 </RCC>
