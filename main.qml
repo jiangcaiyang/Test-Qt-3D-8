@@ -93,200 +93,44 @@ Entity
                 }
             }
 
-            ClearBuffer
+            LayerFilter
             {
-                buffers: ClearBuffer.ColorDepthBuffer
+                layers: [ "screenQuad" ]
                 CameraSelector
                 {
                     camera: camera
+
+                    ClearBuffer
+                    {
+                        buffers: ClearBuffer.ColorDepthBuffer
+                    }
                 }
             }
+
+
         }
     }
 
-    Entity
+    SceneEntity
     {
-        Layer
-        {
-            id: sceneLayer
-            names: "scene"
-        }
-
-        Mesh
-        {
-            id: mesh
-            source: "qrc:/toyplane.obj"
-        }
-
-        Material
-        {
-            id: material
-            effect: effect
-
-            Effect
-            {
-                id: effect
-                techniques: [ technique ]
-
-                Technique
-                {
-                    id: technique
-                    openGLFilter
-                    {
-                        api: OpenGLFilter.Desktop
-                        profile: OpenGLFilter.None
-                        majorVersion: 2
-                        minorVersion: 0
-                    }
-
-                    parameters:
-                    [
-                        Parameter
-                        {
-                            name: "lightPosition"
-                            value: camera.position
-                        },
-                        Parameter
-                        {
-                            name: "texPalette"
-                            value: texPalette
-                        }
-                    ]
-
-                    Texture2D
-                    {
-                        id: texPalette
-
-                        TextureImage
-                        {
-                            source: "qrc:/discreetPalette.png"
-                        }
-                    }
-
-                    renderPasses: [ grayMapPass ]
-                    RenderPass
-                    {
-                        id: grayMapPass
-
-                        shaderProgram: toonSP
-                        ShaderProgram
-                        {
-                            id: toonSP
-                            vertexShaderCode: loadSource( "qrc:/Depth.vert" )
-                            fragmentShaderCode: loadSource( "qrc:/Depth.frag" )
-                        }
-
-//                        renderStates:
-//                        [
-//                            PolygonOffset { factor: 4; units: 4 },
-//                            DepthTest { func: DepthTest.LessOrEqual }
-//                        ]
-                    }
-                }
-            }
-        }
-
-        components: [ sceneLayer, mesh, material ]
+        Layer { id: sceneLayer; names: "scene" }
+        effect: DepthEffect { }
+        layer: sceneLayer
     }
 
-    //! [9]
-    Entity
+    SceneEntity
     {
-        Layer
-        {
-            id: screenLayer
-            names: "screenQuad"
-        }
-        PlaneMesh
-        {
-            id: planeMesh
-            width: 2.0
-            height: 2.0
-            meshResolution: Qt.size( 2, 2 )
-        }
-        Transform
-        {
-            id: planeTransform
-
-            Rotate
-            {
-                axis : Qt.vector3d( 1.0, 0.0, 0.0 )
-                angle : 90
-            }
-        }
-        Material
-        {
-            id: planeMat
-
-            effect: planeEffect
-
-            Effect
-            {
-                id: planeEffect
-                techniques: [ planeTech ]
-
-                Technique
-                {
-                    id: planeTech
-
-                    openGLFilter
-                    {
-                        api: OpenGLFilter.Desktop
-                        profile: OpenGLFilter.None
-                        majorVersion: 2
-                        minorVersion: 0
-                    }
-
-                    parameters:
-                    [
-                        Parameter
-                        {
-                            name: "colorAttachTex"
-                            value: colorAttachTex
-                        },
-                        Parameter
-                        {
-                            name: "texSize"
-                            value : Qt.size( window.width,
-                                            window.height )
-                        },
-                        Parameter
-                        {
-                            name: "texOffsetX"
-                            value: 1.0 / depthAttachTex.width
-                        },
-                        Parameter
-                        {
-                            name: "texOffsetY"
-                            value: 1.0 / depthAttachTex.height
-                        }
-                    ]
-
-                    renderPasses: [ outputPass ]
-                    RenderPass
-                    {
-                        id: outputPass
-
-                        shaderProgram: outputSP
-                        ShaderProgram
-                        {
-                            id: outputSP
-                            vertexShaderCode: loadSource( "qrc:/Output.vert" )
-                            fragmentShaderCode: loadSource( "qrc:/Output.frag" )
-                        }
-//                        renderStates:
-//                        [
-//                            PolygonOffset { factor: 4; units: 4 },
-//                            DepthTest { func: DepthTest.Less }
-//                        ]
-                    }
-                }
-            }
-        }
-
-        components: [ screenLayer, planeMesh, planeTransform, planeMat ]
+        Layer { id: quadLayer_1; names: "screenQuad" }
+        effect: ToonEffect { }
+        layer: quadLayer_1
     }
-    //! [9]
+
+    ScreenQuadEntity
+    {
+        Layer { id: quadLayer; names: "screenQuad" }
+        colorAttachTex: colorAttachTex
+        layer: quadLayer
+    }
 
     Configuration
     {

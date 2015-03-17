@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>DepthEffect.qml</file>
+        <file>SceneEntity.qml</file>
+        <file>ScreenQuadEntity.qml</file>
+        <file>ToonEffect.qml</file>
     </qresource>
 </RCC>
